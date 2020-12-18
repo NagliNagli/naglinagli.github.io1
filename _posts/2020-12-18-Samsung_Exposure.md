@@ -44,7 +44,7 @@ Navigating to https://admin.csr.samsung.com/ presented us with a static web page
 
 Observing the login functioniallity was just utilizing the SSO of samsung.com, I was redirected to account.samsung.com and had to enter my account information, and later on redirected to fill up another few details at the origin of the request.
 
-![login](/images/flow_video.mov)
+![login](/images/flow_video.webp)
 
 We are unauthorized to access the data which the subdomain servers, probably because we are not samsung employees and as we need to wait for the manager approval.
 
@@ -107,60 +107,33 @@ Replacing dumped auth code with the one I have issues allowed me to bypass the r
 
 ![K.O](/images/giphy.webp)
 
-##Impact
+### Impact
 
+-[ ] Accessing a private administrator web app supplying credentials of samsung employees and the system/admin of the system
 
-## Key Takeaways
+-[ ] Email addresses and full names of samsung employees using the application
 
-So, after presenting to you the severe yet simple IDOR i have found on the DoD, those are the key takeaways i want you to take from my blogpost.
+### Remediation
 
-### Think outside of the box
+The issue was fixed by samsung's security team while issuing a 403 error when trying to access the page as unauthorized personal
 
-![get_started](/images/outside_thebox.jpg)
+### Timeline
 
-When you encounter a program with alot of assets, don't just stick to the normal content discovery and subdomain recon tools, try to think and reflect at first where i might have the bigger chance to find vulnerable endpoints and misconfigurations.
-Google Dorking is a great asset to express your creativity while supplying various of search queries to find specific and accurate data about your target
+- [ ] Issue found and reported on samsung's mobile bug bounty platform - 12.12.2020
+- [ ] Issue assigned to security analyst - 14.12.2020
+- [ ] Issue fixed - 15.12.2020
+- [ ] Report has been moved from samsung mobile department as its not a service being operated by them - 15.12.2020
+- [ ] Recieved a "Thanks" letter from security@samsung.com team, which are not rewarding any bounties for findings - 17.12.2020
 
-### Avoid rabbit holes
+### Conclusion
 
-![hole](/images/rabbit_hole.jpg)
+Although I didn't recieve any bounty from the finding, and the fact that I could earn the "thanks" letter from samsung by reporting a low severity issue as well, it was nice to find a critical misconfiguration on such a big company from what seemed to be pretty static page.
 
-We need to be mature enough to understand if a specific endpoint is hardend, or we might find vulnerabilities in it.
-
-The vast majority of DoD login pages are using the same login functioniallity, asking you to supply a CaC card and is hardend with many security measures.
-
-Although someone might find a misconfiguration in this process, we should identify that it's less likely to find one and invest more on our recon to find the web pages which are stick out differently to the common coding and work ethics of the company.
-
-Investing our time on domain specific and unique designs insted of the wide and common functioniality which is being used on most of DoD websites will make our researching time more efficent and fruitful, and will help us avoid being burnt-out.
-
-### Dedication
-
-I really recommend that you set yourself monthly/weekly goals, some days or weeks you won't find anything, and one day you will find a Critical bug without any preperation and expectation.
-
-As you might notice, by the time this report was triaged on the 27th of August, i had 192 reputation points, and i haven't gotten my first reward from bug bounties.
-
-Today, as of the day i have written this report on November 7th 2020:
-
-- [ ] I have reported bugs which rewarded me 4 digits in total
-- [ ] I have passed yesterday the 1K reputation mark on H1, 704 of those points on the DoD program
-- [ ] I have reported vulnerabilities to major companies including H1, BugCrowd, Samsung and more..
-
-![1k](/images/1K_rep.png)
-
-During that span of time I have done many things to boost my Web Application Security level, such as:
-
-- [ ] Completing most of Portswigger labs <https://portswigger.net/web-security>
-- [ ] Building my own Automation tool on my VPS using the great open source tools of <https://twitter.com/pdiscoveryio>
-- [ ] Reading alot of tweets, writeups, videos from fellow bug bounty hunters in the community.
-
-The point here is not to brag about myself, is to inspire you to put those hours and dedication to the things which drives you and makes you wake up at night.
-
+It makes you understand that the intersting parts when engaging with bug bounty programs are the unseen ones :-)
 
 ## Thanks for sticking out!
 
-Hope you enjoyed reading my writeup, and i hope you can implement one of the tips i have supplied below to boost up your Bug Bounty Hunting Game!
-
-If you did so, Please share my blog to spread it upon the Bug Bounty Community :-)
+Hope you enjoyed reading my writeup, Sharing the blog could be nice and I hope you discovered new ways of approching a target from my blog :-)
 
 You can find me on:
 
