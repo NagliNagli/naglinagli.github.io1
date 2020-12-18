@@ -16,10 +16,10 @@ minimal_mistakes_skin    : "contrast"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Personal Infosec Blog | Bug Bounty Write-ups | Web Application Security | SLAE32"
+title                    : "Welcome to my personal AppSec Blog"
 title_separator          : "-"
 name                     : "Gal Nagli"
-description              : "Information Security Bug Bounty and CTF's"
+description              : "Security Researcher @enso.security | Bug Bounty Hunter""
 url                      : "https://naglinagli.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : 
 repository               : "NagliNagli/naglinagli.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
