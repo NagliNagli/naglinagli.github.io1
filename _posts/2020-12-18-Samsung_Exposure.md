@@ -21,9 +21,9 @@ Samsung operates their bounty policy on the following link (https://security.sam
 As they state that only vulnerabilities affecting the samsung mobile/tv team services or devices is eligible for bounty, you can't really know what services actually belongs to them, so I have decided to look at the *.samsung.com scope
 
 
-![recon image](/images/recon1.jpg)
-
 ### Reconnaissance
+
+![recon image](/images/recon1.jpg)
 
 As you might have read from my previous blog post, there is no magic when it comes to reconnaissance.
 Utilizing my bash script which integrates the known open source tools for subdomain discovery presented 853 alive probed subdomain results
