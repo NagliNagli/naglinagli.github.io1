@@ -74,6 +74,7 @@ https://admin.csr.samsung.com/rest/v1/system/list/
 
 The page supplied every user which used the login form with his account, with the following details:
 
+```javascript
 {"userId":150,
 "login":"example@samsung.com",
 "authCode":"aaa13QIsoczffAF6YvAOJkuzXXXXXXXXXXXXXXXXXXXXXXX",
@@ -94,6 +95,7 @@ The page supplied every user which used the login form with his account, with th
 "dept":null,
 "empYn":null,
 "reqRole":null}
+```
 
 There were approximatly 200 users, including administrators.
 
