@@ -21,7 +21,7 @@ Samsung operates their bounty policy on the following link (https://security.sam
 As they state that only vulnerabilities affecting the samsung mobile/tv team services or devices is eligible for bounty, you can't really know what services actually belongs to them, so I have decided to look at the *.samsung.com scope
 
 
-![recon image](recon image)
+![recon image](/images/recon1.jpg)
 
 ### Reconnaissance
 
