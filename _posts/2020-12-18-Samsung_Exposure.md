@@ -55,11 +55,11 @@ So, pretty much a dead end?
 While observing the functionallities my Burp proxy was up and running, and the JS Link Finder extension came clutch.
 
 JS Link Finder is the Burp Extension for a passively scanning JavaScript files for endpoint links. - Export results the text file - Exclude specific 'js' files e.g. jquery, google-analytics
-(https://portswigger.net/bappstore/0e61c786db0c4ac787a08c4516d52ccf)
+[portswigger](https://portswigger.net/bappstore/0e61c786db0c4ac787a08c4516d52ccf)
 
 Observing the links which the extension found we could notice that there are many rest api endpoints which could be intersting to determine if they are accessible from unauthenticated and unauthorized user perspective
 
-As there were 600 intersting links to look on, doing so manually wouldn't be effective, you can copy the complete list from JS link finder, create a new text file, cutting it to remove the ordering by "cat jstest.xt | cut -d " " -f 3"
+As there were 600 intersting links to look on, doing so manually wouldn't be effective, you can copy the complete list from JS link finder, create a new text file, cutting it to remove the ordering by (" cut -d " " -f 3")
 
 Supplying the list to ffuf we would notice several intersting endpoints which return 200, so this narrowed the list to be compatible with manual observation.
 
