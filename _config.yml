@@ -108,7 +108,7 @@ analytics:
 author:
   name             : "Gal Nagli"
   avatar           : "/images/profile.jpeg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "B.Sc Computer Science Student"
+  bio              : "Security Researcher @enso.security | B.Sc CS Student | Bug Bounty Hunter"
   location         : "IL"
   email            :
   links:
