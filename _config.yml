@@ -283,6 +283,8 @@ compress_html:
   ignore:
     envs: development
 
+# Google Analytics
+google_analytics: G-8RGG4QWGL1
 
 # Defaults
 defaults:
