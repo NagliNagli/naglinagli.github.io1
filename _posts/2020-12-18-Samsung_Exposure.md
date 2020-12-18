@@ -37,7 +37,7 @@ The nuclei scan for known vulnerabilities didn't return any significant result, 
 
 At first it would be normal to look at the subdomains which include intersting keywords as dev,admin,stage.
 
-Eventually this led to me explore few subdomains which consists those keywords, and in particular the vulnerable subdomain https://admin.csr.samsung.com/
+Eventually this led me to explore few subdomains which consisted those keywords, and in particular the vulnerable subdomain https://admin.csr.samsung.com/
 
 ### Manual Inspection
 
