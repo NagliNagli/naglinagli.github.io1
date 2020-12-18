@@ -12,7 +12,7 @@ tags:
 
 **Broken Access Control on samsung.com subdomain leads to leakage of employees and customers authCodes, email addresses and full name**
 
-![preview](/images/Samsung_teaser.png
+![preview](/images/Samsung_teaser.png)
 
 ## Greetings
 
