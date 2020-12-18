@@ -17,7 +17,9 @@ tags:
 ## Greetings
 
 As we have entered the month of december, I have decided to freshen up some targets and decided to give a look at Samsung's Bug Bounty programs as I had good experience with them at the past.
+
 Samsung operates their bounty policy on the following link [Policy](https://security.samsungmobile.com/)
+
 As they state that only vulnerabilities affecting the samsung mobile/tv team services or devices is eligible for bounty, you can't really know what services actually belongs to them, so I have decided to look at the *.samsung.com scope
 
 
@@ -26,6 +28,7 @@ As they state that only vulnerabilities affecting the samsung mobile/tv team ser
 ![recon image](/images/recon1.jpg)
 
 As you might have read from my previous blog post, there is no magic when it comes to reconnaissance.
+
 Utilizing my bash script which integrates the known open source tools for subdomain discovery presented 853 alive probed subdomain results
 
 ![recon](/images/853.png)
@@ -42,7 +45,8 @@ Navigating to https://admin.csr.samsung.com/ presented us with a static web page
 
 ![recon](/images/static_page.png)
 
-Observing the login functioniallity was just utilizing the SSO of samsung.com, I was redirected to account.samsung.com and had to enter my account information, and later on redirected to fill up another few details at the origin of the request.
+Observing the login functioniallity was just utilizing the SSO of samsung.com, I was redirected to account.samsung.com and had to enter my account information,
+and later on redirected to fill up another few details at the origin of the request.
 
 ![login](/images/flow_video.gif)
 
@@ -55,6 +59,7 @@ So, pretty much a dead end?
 While observing the functionallities my Burp proxy was up and running, and the JS Link Finder extension came clutch.
 
 JS Link Finder is the Burp Extension for a passively scanning JavaScript files for endpoint links. - Export results the text file - Exclude specific 'js' files e.g. jquery, google-analytics
+
 [LinkFinder link](https://portswigger.net/bappstore/0e61c786db0c4ac787a08c4516d52ccf)
 
 Observing the links which the extension found we could notice that there are many rest api endpoints which could be intersting to determine if they are accessible from unauthenticated and unauthorized user perspective
