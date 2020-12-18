@@ -70,8 +70,7 @@ Supplying the list to ffuf we would notice several intersting endpoints which re
 
 ![endpoint](/images/endpoint.png)
 
-The following endpoint prove to be critically severe:
-(It's fixed now)
+The following endpoint proved to be critically severe (It's fixed now):
 
 ```javascript
 https://admin.csr.samsung.com/rest/v1/system/list/
