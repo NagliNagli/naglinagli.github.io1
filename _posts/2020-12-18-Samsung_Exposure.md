@@ -111,7 +111,7 @@ Replacing dumped auth code with the one I have issues allowed me to bypass the r
 
 ### Impact
 
-- [ ] Accessing a private administrator web app supplying credentials of samsung employees and the system/admin of the system
+- [ ] Accessing an administrator only web app supplying credentials of samsung employees and the system/admin of the system
 
 - [ ] Email addresses and full names of samsung employees using the application
 
@@ -129,7 +129,7 @@ The issue was fixed by samsung's security team while issuing a 403 error when tr
 
 ![lucky](/images/lucky.jpeg)
 
-![thanks](/images/thanks.jpeg)
+![thanks](/images/thanks.png)
 
 ### Conclusion
 
