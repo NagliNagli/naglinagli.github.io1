@@ -19,7 +19,7 @@ locale                   : "en-US"
 title                    : "Welcome to my personal AppSec Blog"
 title_separator          : "-"
 name                     : "Gal Nagli"
-description              : "Security Researcher @enso.security | Bug Bounty Hunter"
+description              : "Security Researcher @enso.security, B.Sc CS Student, Bug Bounty Hunter"
 url                      : "https://naglinagli.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : 
 repository               : "NagliNagli/naglinagli.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
