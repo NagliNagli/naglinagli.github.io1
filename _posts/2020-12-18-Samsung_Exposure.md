@@ -105,13 +105,13 @@ There were approximatly 200 users, including administrators.
 
 ![samsung_creds](/images/samsung_creds.gif)
 
-Now we need to figure out how is the authCode implemented on the application we are testing?
+Now we need to figure out how the authCode is implemented on the application we are testing?
 
-After issuing the login functioniallity from the account.samsung.com we can observe that the following request is being initiated:
+After issuing the login functioniallity from account.samsung.com we can observe that the following request is being initiated:
 
 ![code](/images/code.png)
 
-Replacing dumped auth code with the one I have issues allowed me to bypass the restriction and access the application as the victim account.
+Replacing dumped auth code with the one I have issued allowed me to bypass the restriction and access the application as the victim account.
 
 ![K.O](/images/giphy.webp)
 
