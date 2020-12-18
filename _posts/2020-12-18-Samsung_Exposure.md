@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Broken Access Control on samsung.com subdomain leads to leakage of employees and customers authCodes, email addresses and full name.
+title: Broken Access Control on samsung.com subdomain leads to Mass Account Takeover of samsung employees application accounts
 date: 2020-12-18
 classes: wide
 header:
@@ -10,7 +10,7 @@ tags:
   -BugBounty
 --- 
 
-**Broken Access Control on samsung.com subdomain leads to leakage of employees and customers authCodes, email addresses and full name**
+**Broken Access Control on samsung.com subdomain leads to Mass Account Takeover of samsung employees application accounts**
 
 ![preview](/images/Samsung_teaser.png)
 
@@ -111,9 +111,9 @@ Replacing dumped auth code with the one I have issues allowed me to bypass the r
 
 ### Impact
 
--[ ] Accessing a private administrator web app supplying credentials of samsung employees and the system/admin of the system
+- [ ] Accessing a private administrator web app supplying credentials of samsung employees and the system/admin of the system
 
--[ ] Email addresses and full names of samsung employees using the application
+- [ ] Email addresses and full names of samsung employees using the application
 
 ### Remediation
 
@@ -126,6 +126,10 @@ The issue was fixed by samsung's security team while issuing a 403 error when tr
 - [ ] Issue fixed - 15.12.2020
 - [ ] Report has been moved from samsung mobile department as its not a service being operated by them - 15.12.2020
 - [ ] Recieved a "Thanks" letter from security@samsung.com team, which are not rewarding any bounties for findings - 17.12.2020
+
+![lucky](/images/lucky.jpeg)
+
+![thanks](/images/thanks.jpeg)
 
 ### Conclusion
 
@@ -144,6 +148,6 @@ You can find me on:
 - [ ] BugCrowd: <https://bugcrowd.com/Nagli>
 - [ ] Linkedin: <https://www.linkedin.com/in/galnagli>
 
-![thanks](/images/theend.jpg)
+![thanks2](/images/seal.jpg)
 
 
