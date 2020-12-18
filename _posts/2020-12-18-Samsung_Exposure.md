@@ -44,7 +44,7 @@ Navigating to https://admin.csr.samsung.com/ presented us with a static web page
 
 Observing the login functioniallity was just utilizing the SSO of samsung.com, I was redirected to account.samsung.com and had to enter my account information, and later on redirected to fill up another few details at the origin of the request.
 
-![login](/images/flow_video.webp)
+![login](/images/flow_video.gif)
 
 We are unauthorized to access the data which the subdomain servers, probably because we are not samsung employees and as we need to wait for the manager approval.
 
@@ -96,6 +96,8 @@ The page supplied every user which used the login form with his account, with th
 "reqRole":null}
 
 There were approximatly 200 users, including administrators.
+
+![samsung_creds](/images/samsung_creds.gif)
 
 Now we need to figure out how is the authCode implemented on the application we are testing?
 
