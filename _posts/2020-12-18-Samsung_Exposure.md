@@ -37,11 +37,11 @@ The nuclei scan for known vulnerabilities didn't return any significant result, 
 
 At first it would be normal to look at the subdomains which include intersting keywords as dev,admin,stage.
 
-Eventually this led me to explore few subdomains which consisted those keywords, and in particular the vulnerable subdomain https://admin.csr.samsung.com/
+Eventually this led me to explore few subdomains which consisted those keywords, and in particular the vulnerable subdomain https://redacted.samsung.com/
 
 ### Manual Inspection
 
-Navigating to https://admin.csr.samsung.com/ presented us with a static web page with a small login button up top.
+Navigating to https://redacted.samsung.com/ presented us with a static web page with a small login button up top.
 
 ![recon](/images/static_page.png)
 
@@ -73,7 +73,7 @@ Supplying the list to ffuf we would notice several intersting endpoints which re
 The following endpoint proved to be critically severe (It's fixed now):
 
 ```javascript
-https://admin.csr.samsung.com/rest/v1/system/list/
+https://redacted.samsung.com/rest/v1/system/list/
 ```
 
 The page supplied every user which used the login form with his account, with the following details:
