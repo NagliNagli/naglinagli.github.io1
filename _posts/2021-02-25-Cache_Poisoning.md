@@ -79,9 +79,9 @@ to the X-Forwarded-For header? will it reflect in the response?
 
 ![hit_request](/images/hit_request.png)
 
-And it was the case, I managed to inject XSS payload from my header request, which got reflected in the page and got **HIT** indication frm the CF-Cache-Status header.
+And it was the case, I managed to inject XSS payload from my header request, which got reflected in the page and got **HIT** indication fromm the **CF-Cache-Status header**.
 
-In order to verify that the content is being served from the cache, we should initiate a second request without the X-Forwarded-For header this time, and to see if the response remains the same.
+In order to verify that the content is being served from the cache, we should initiate a second request without the **X-Forwarded-For** Header this time, and to see if the response remains the same.
 
 ![2nd_req](/images/2nd_req.png)
 
