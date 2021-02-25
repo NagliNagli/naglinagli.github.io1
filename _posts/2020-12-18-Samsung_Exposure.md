@@ -3,11 +3,7 @@ layout: single
 title: Broken Access Control on samsung.com subdomain leads to Mass Account Takeover of Samsung employees application accounts
 date: 2020-12-18
 classes: wide
-header:
-  teaser: /images/Samsung_teaser.png
-tags:
-
-  BugBounty
+thumbnail: /images/Samsung_teaser.png
 --- 
 
 **Broken Access Control on samsung.com subdomain leads to Mass Account Takeover of Samsung employees application accounts**
