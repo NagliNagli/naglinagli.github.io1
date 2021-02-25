@@ -13,11 +13,11 @@ image: https://galnagli.com/images/Samsung_teaser.png
 
 ## General
 
-Recently at the begining of february I was surprised to open my email and to see that I have recieved a new private program invite frm Bugcrowd, as this is a rare occasion for many during the last couple of months.
+Cometh the month of February I was surprised to open my email seeing that I have recieved a new private program invite frm Bugcrowd, as this is a rare occasion for many during the last couple of months.
 
-The program was fairly new, and I received the invite 2 days after it launched, meaning that there was a first wave of sweep for bugs from the first batch of security researchers.
+The program was fairly new, and I received the invite 2 days upon the official launch, meaning that there already was first sweep for bugs from the first batch of security researchers.
 
-I had good sense for the program as I could find the first Reflected XSS on it in roughly 2 minutes from it's login page on a path which looked like the following:
+I had good feeling about the program as I could find the first Reflected XSS on it in roughly 2 minutes from it's login page on a path which looked like the following:
 
 ```javascript
 https://example.com/login?returnTo=javascript:alert(document.domain)
