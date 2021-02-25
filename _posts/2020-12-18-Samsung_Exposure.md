@@ -7,7 +7,7 @@ header:
   teaser: /images/Samsung_teaser.png
 tags:
 
-  -BugBounty
+  BugBounty
 --- 
 
 **Broken Access Control on samsung.com subdomain leads to Mass Account Takeover of Samsung employees application accounts**
