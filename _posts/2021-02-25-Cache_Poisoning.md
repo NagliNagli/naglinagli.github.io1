@@ -29,139 +29,134 @@ However, one of those dupes led me to find a Web Cache Poisoning vulnerability w
 
 The content and whole idea of the blog is based on [Practical Web Cache Poisoning](https://portswigger.net/research/practical-web-cache-poisoning) Research of [albinowax](https://twitter.com/albinowax)
 
-Which introduced me to the bug class, although I felt alittle skeptical and didn't really think i'd encounter one of those in the wild.
+Which exposed me to the Cache Poisoning bug class, although I felt alittle skeptical and didn't really think i'd encounter one of those in the wild.
 
-### Reconnaissance
+### Getting the first foothold.
 
-![recon image](/images/recon1.jpg)
+As I was getting the duplicate alerts from Bugcrowd I decided to dig deeper inside the application, as although I was invite 2 days later than most hackers to the program, I still believed that there are more bugs to find due to the variety of functionialities the applicaiton presented.
 
-As you might have read from my previous blog post, there is no magic when it comes to reconnaissance.
+Indeed I was proved that this is the case when I found 2 IDOR's which rewarded me nicely, and made me to go deeper on the "weird" looking page which I got duped for my Reflected XSS a day earlier.
 
-Utilizing my bash script which integrates the known open source tools for subdomain discovery presented 853 alive probed subdomain results
+Examination of the page:
 
-![recon](/images/853.png)
+![inital_page](/images/853.png)
 
-The nuclei scan for known vulnerabilities didn't return any significant result, so it was time to dive in the subdomains and look manually for intersting information.
+The page reflected some of the headers from my request, including the referer header, useragent, timestamp and IP address field which I could confirm that is mine.
 
-At first it would be normal to look at the subdomains which include intersting keywords as dev,admin,stage.
+It was being served on one of the main targets subdomains, and I have gotten to the specific endpoint by navigating through some waybackmachine endpoints, therefore I didn't have any query params on my initial request to the endpoint.
 
-Eventually this led me to explore few subdomains which consisted those keywords, and in particular the vulnerable subdomain https://redacted.samsung.com/
+As it was reflecting some params and looked like a page which definitely shouldn't server any purpose for it being public, I decided to run [ParamMiner](https://github.com/PortSwigger/param-miner) to get some query params, using the "Guess Everything" option.
 
-### Manual Inspection
+After the scan It returned for me some query params which led me to the duplicate Reflected XSS, because it was possible to guess those by inspecting the page contents.
 
-Navigating to https://redacted.samsung.com/ presented us with a static web page with a small login button up top.
+Although, a few minutes later I noticed that the scan returned to me "Cache poisoning 3" Flag, indicating that it's firm that there is Web Cache Poisoning issue on the page.
 
-![recon](/images/static_page.png)
+![cache_alert](/images/cache_alert)
 
-Observing the login functioniallity was just utilizing the SSO of samsung.com, I was redirected to account.samsung.com and had to enter my account information,
-and later on redirected to fill up another few details at the origin of the request.
+I started with a quick fingerprinting checks, and saw that the target is running on CloudFlare, and that my requests are indeed being returned with the "CF-Cache-Status: HIT" response, which means that the response to the page will be presented from the cache.
 
-![login](/images/flow_video.gif)
+Why did we get the Cache Poisoning alert? 
 
-We are unauthorized to access the data which the subdomain servers, probably because we are not samsung employees and as we need to wait for the manager approval.
+This is due to the fact that CloudFlare supports [X-Forwarded-For](https://support.cloudflare.com/hc/en-us/articles/200170986-How-does-Cloudflare-handle-HTTP-Request-headers-) Header in it's requests, which will append the input being inserted inside the parameter to the existing IP addresses of the client.
 
-So, pretty much a dead end?
+The scanner identified that the cache is being interpreted and evaluated with the "HIT" response, and that we have Unkeyed params which can be used to differ between requests, and we can serve the same page with additional context to victims who query the specific cached endpoint.
+
+Now, into the exploitation part.
 
 ### Exploitation
 
-While observing the functionallities my Burp proxy was up and running, and the JS Link Finder extension came clutch.
+At this point I have strong indication that the page is vulnerable to Web Cache Poisoning, although I need to show some impact being presetend from it.
 
-JS Link Finder is the Burp Extension for a passively scanning JavaScript files for endpoint links. - Export results the text file - Exclude specific 'js' files e.g. jquery, google-analytics
+As we saw from the earlier request to the page, it reflected back few headers from my original request, like the referer header or the IP addresses which made the request to the frontend proxy
 
-[LinkFinder link](https://portswigger.net/bappstore/0e61c786db0c4ac787a08c4516d52ccf)
+First thing which came to my mind is what will happen if I add 
 
-Observing the links which the extension found we could notice that there are many rest api endpoints which could be intersting to determine if they are accessible from unauthenticated and unauthorized user perspective
-
-As there were 600 intersting links to look on, doing so manually wouldn't be effective, you can copy the complete list from JS link finder, create a new text file, cutting it to remove the ordering by (" cut -d " " -f 3")
-
-Supplying the list to ffuf we would notice several intersting endpoints which return 200, so this narrowed the list to be compatible with manual observation.
-
-![endpoint](/images/endpoint.png)
-
-The following endpoint proved to be critically severe (It's fixed now):
-
-```javascript
-https://redacted.samsung.com/rest/v1/system/list/
+```javsascript
+"><script>alert("nagli")</script>
 ```
 
-The page supplied every user which used the login form with his account, with the following details:
+to the X-Forwarded-For header? will it reflect in the response?
 
-```javascript
-{"userId":150,
-"login":"example@samsung.com",
-"authCode":"aaa13QIsoczffAF6YvAOJkuzXXXXXXXXXXXXXXXXXXXXXXX",
-"fullName":"Israel Israeli",
-"email":"example@samsung.com",
-"locale":"ko","timezone":"Asia/Seoul",
-"datetimePattern":"YYYY-MM-DD HH:mm",
-"statusId":3,"epid":null,
-"loginFailCount":0,
-"orgId":null,
-"deleteYn":"N",
-"createUserId":4,
-"createDate":"2020-10-17T05:44:47Z",
-"updateUserId":null,
-"updateDate":null,
-"lastAuthCodeUpdateDate":"2020-10-17T05:44:47Z",
-"token":null,
-"dept":null,
-"empYn":null,
-"reqRole":null}
+![hit_request](/images/hit_request.png)
+
+And it was the case, I managed to inject XSS payload from my header request, which got reflected in the page and got "HIT" indication frm the CF-Cache-Status header.
+
+In order to verify that the content is being served from the cache, we should initiate a second request without the X-Forwarded-For header this time, and to see if the response remains the same.
+
+![2nd_req](/images/2nd_req.png)
+
+It's a success, I managed to cache the XSS to other participants (In this case on my WAN), which means that every device which was connected to my router at that time was infected with stored XSS when he navigated to the infected endpoint.
+
+One crucial thing to note out that took me some time to understand is the fact that not every extension from the page will get cached from cloudflare, you can refer to this [Understanding Cloudflare Cache](https://support.cloudflare.com/hc/en-us/articles/200172516-Understanding-Cloudflare-s-CDN) in order to know  more about CloudFlare caching mechanism.
+
+What this actually meant to my exploitation is the fact that my original endpoint was an HTML one, which looked like the following
+
+```
+https://subdomains.example.com/somefolder/someendpoint.html
 ```
 
-There were approximatly 200 users, including administrators.
+Therefore, CloudFlare will never serve it from it's cache, as for my praticular case the endpoints were the same on all requests within the subdomain, so I decided to craft my payload on an endpoint which will be cached eventually, like the following:
 
-![samsung_creds](/images/samsung_creds.gif)
+```
+https://subdomains.example.com/somefolder/someendpoint/nagli.css
+```
 
-Now we need to figure out how the authCode is implemented on the application we are testing?
+As CloudFlare will happily cache css files, it had no problem with my exploitation payload.
 
-After issuing the login functioniallity from account.samsung.com we can observe that the following request is being initiated:
+![cache_xss](/images/cache_xss.png)
 
-![code](/images/code.png)
+Eventually I have stored XSS vulnerability which can be used to exfilitrate cookies from the main domain, which would lead to account takeover from the main site upon navigating to the cached endpoint.
 
-Replacing dumped auth code with the one I have issued allowed me to bypass the restriction and access the application as the victim account.
+I will give a few tips on writing Web Cache Poisoning report, as it took some back and fourth with Bugcrowd's triagers until we came to conclusion to triage it as P2 issue, because of the uniqueness of the issue.
 
-![K.O](/images/giphy.webp)
+### Submitting the report
 
-### Impact
+I have submitted my report to Bugcrowd as "Web Cache Poisoning via X-Forwarded-For Header to Stored XSS on subdomain.example.com"
 
-- [ ] Accessing an administrator only web app supplying credentials of samsung employees and the system/admin of the system
+Upon my first submission I didn't take into consideration the file types which cloudflare caching accepts, which madem y reproduction steps not reproducible at first.
 
-- [ ] Email addresses and full names of samsung employees using the application
+Also, as it was only affecting my nearby area and devices connected to my Wifi spot, I couldn't just craft a point and send it to the triager with alert box popping.
 
-### Remediation
+Reading this great [Cache Poisoning Report](https://hackerone.com/reports/303730) gave me some idea about explaining the nature of the problem in clearer manenr, and explaining the reproduction steps to it's best way.
 
-The issue was fixed by samsung's security team while issuing a 403 error when trying to access the page as unauthorized personal
+![poisoning_areas](/images/poisoning_areas.png)
+
+I have included those lines of wisdom which explained the fact about the cdn "regions", and where as attackers we can craft our PoC to attack and target other regions.
+
+Although we shouldn't guess the region of our triager, so it should be enough demonstrating the impact within our local network, giving the following clear reproduction steps
+
+```
+Steps to Reproduce:
+1. Intercept the request to the following page https://subdomain.example.com/somefolder/someendpoint/nagli.css using burpsuite or any other tool.
+2. Add the X-Forwarded-For header: "><script>alert(1)</script>
+3. Get the request to the Burp repeater and send requests until you get "CF-Cache-Status: HIT" from the server
+4. Remove the X-Forwarded-For header and send the request again, note that XSS payload is still being served from the cache
+5. Navigate to the cached endpoint from different browser and note that alert will execute.
+```
+
+Those steps did the job just fine, and managed to get my report triaged as P2.
+
+![reward](/images/reward.png)
 
 ### Timeline
 
-- [ ] Issue found and reported on samsung's mobile bug bounty platform - 12.12.2020
-- [ ] Issue assigned to security analyst - 14.12.2020
-- [ ] Issue fixed - 15.12.2020
-- [ ] Report has been moved from samsung mobile department as its not a service being operated by them - 15.12.2020
-- [ ] Recieved a "Thanks" letter from security@samsung.com team, which are not rewarding any bounties for findings - 17.12.2020
+- [ ] Web Cache Poisoning issue submitted - 29/01/2021
+- [ ] Triager couldn't reproduce the issue - 06/02/2021
+- [ ] Clearer reproduction steps submitted - 07/02/2021
+- [ ] Triage as P2 - 09/02/2021
+- [ ] 1000$ Reward - 09/02/2021
 
-![lucky](/images/lucky.jpeg)
-
-![thanks](/images/thanks.png)
 
 ### Conclusion
 
-Although I didn't recieve any bounty from the finding, and the fact that I could earn the "thanks" letter from samsung by reporting a low severity issue as well, it was nice to find a critical misconfiguration on such a big company from what seemed to be pretty static page.
-
-It makes you understand that the intersting parts when engaging with bug bounty programs are the unseen ones :-)
+I didn't try to go deep on Web Cache Poisoning as a concept in general because there are many great resources for that knowledge, the main idea about this blog post is to show how I approached and practically managed to exploit what considers to be rare vulnerability and noting it down into more friendly steps.
 
 ## Thanks for sticking out!
 
-Hope you enjoyed reading my writeup, Sharing the blog could be nice and I hope you discovered new ways of approching a target from my blog :-)
-
-You can find me on:
+Some Social Links:
 
 - [ ] Twitter: <https://twitter.com/naglinagli>
-- [ ] H1: <https://hackerone.com/nagli>
-- [ ] BugCrowd: <https://bugcrowd.com/Nagli>
+- [ ] HackerOne: <https://hackerone.com/nagli>
+- [ ] Bugcrowd: <https://bugcrowd.com/Nagli>
 - [ ] Linkedin: <https://www.linkedin.com/in/galnagli>
-
-![thanks2](/images/seal.jpg)
-
 
