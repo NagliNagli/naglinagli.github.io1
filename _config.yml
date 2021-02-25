@@ -107,8 +107,8 @@ analytics:
 # Site Author
 author:
   name             : "Gal Nagli"
-  avatar           : "/images/profile.jpeg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Security Researcher @enso.security, B.Sc CS Student, Bug Bounty Hunter"
+  avatar           : "/images/newprofile.jpeg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  bio              : "AppSec Researcher @enso.security, B.Sc CS Student, Bug Bounty Hunter"
   location         : "IL"
   email            :
   links:
