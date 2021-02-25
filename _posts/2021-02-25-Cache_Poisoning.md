@@ -1,23 +1,23 @@
 ---
 layout: single
-title: Poisoning your Cache for 1000$ - Approach walkthrough
+title: Poisoning your Cache for 1000$ - Approach to Exploitation walkthrough
 date: 2021-02-25
 classes: wide
 thumbnail: https://galnagli.com/images/Samsung_teaser.png
 image: https://galnagli.com/images/Samsung_teaser.png
 --- 
 
-**Poisoning your Cache for 1000$ - Approach walkthrough**
+**Poisoning your Cache for 1000$ - Approach to Exploitation walkthrough**
 
 ![preview](/images/cache-poison.jpg)
 
 ## General
 
-Cometh the month of February I was surprised to open my email seeing that I have recieved a new private program invite frm Bugcrowd, as this is a rare occasion for many during the last couple of months.
+Cometh the month of February I was surprised to open my email and seeing that I have recieved a new private program invite from Bugcrowd, as this is a rare occasion for many during the last couple of months.
 
-The program was fairly new, and I received the invite 2 days upon the official launch, meaning that there already was first sweep for bugs from the first batch of security researchers.
+The program was fairly new, and I received the invite 2 days upon their official launch, meaning that there already was first sweep for bugs from the first batch of security researchers.
 
-I had good feeling about the program as I could find the first Reflected XSS on it in roughly 2 minutes from it's login page on a path which looked like the following:
+I had good feeling about the program as I could find Reflected XSS on it in roughly 2 minutes of work, as the login page had vulnerable "returnTo" parameter which looked like the following:
 
 ```javascript
 https://example.com/login?returnTo=javascript:alert(document.domain)
@@ -33,33 +33,33 @@ Which exposed me to the Cache Poisoning bug class, although I felt alittle skept
 
 ### Getting the first foothold.
 
-As I was getting the duplicate alerts from Bugcrowd I decided to dig deeper inside the application, as although I was invite 2 days later than most hackers to the program, I still believed that there are more bugs to find due to the variety of functionialities the applicaiton presented.
+As I was getting the duplicate notifications from Bugcrowd I decided to dig deeper into the application, as even for the fact I was invited 2 days from most  of hackers to the program, I still believed that there are more bugs to find due to the variety of functionialities the applicaiton presented.
 
 Indeed I was proved that this is the case when I found 2 IDOR's which rewarded me nicely, and made me to go deeper on the "weird" looking page which I got duped for my Reflected XSS a day earlier.
 
 Examination of the page:
 
-![inital_page](/images/853.png)
+![inital_page](/images/initial_page.png)
 
 The page reflected some of the headers from my request, including the referer header, useragent, timestamp and IP address field which I could confirm that is mine.
 
 It was being served on one of the main targets subdomains, and I have gotten to the specific endpoint by navigating through some waybackmachine endpoints, therefore I didn't have any query params on my initial request to the endpoint.
 
-As it was reflecting some params and looked like a page which definitely shouldn't server any purpose for it being public, I decided to run [ParamMiner](https://github.com/PortSwigger/param-miner) to get some query params, using the "Guess Everything" option.
+As it was reflecting some params and looked like a page which definitely shouldn't serve any purpose for it being public, I decided to run [ParamMiner](https://github.com/PortSwigger/param-miner) to get some query params, using the **Guess Everything** option.
 
-After the scan It returned for me some query params which led me to the duplicate Reflected XSS, because it was possible to guess those by inspecting the page contents.
+After the scan finished there were some newly discovered query params which led me eventually to duplicate Reflected XSS, due to the fact that it was possible to guess those query params by inspecting the page contents.
 
-Although, a few minutes later I noticed that the scan returned to me "Cache poisoning 3" Flag, indicating that it's firm that there is Web Cache Poisoning issue on the page.
+A few minutes later I noticed that the scan returned to me **Cache poisoning 3** Flag, indicating that it's firm that there is Web Cache Poisoning issue on the page.
 
-![cache_alert](/images/cache_alert)
+![cache_alert](/images/cache_alert.png)
 
-I started with a quick fingerprinting checks, and saw that the target is running on CloudFlare, and that my requests are indeed being returned with the "CF-Cache-Status: HIT" response, which means that the response to the page will be presented from the cache.
+I started with a quick fingerprinting checks, and saw that the target is running on CloudFlare, and that my requests are indeed being returned with the **CF-Cache-Status: HIT** response, which means that the response to the page will be presented from the cache.
 
 Why did we get the Cache Poisoning alert? 
 
 This is due to the fact that CloudFlare supports [X-Forwarded-For](https://support.cloudflare.com/hc/en-us/articles/200170986-How-does-Cloudflare-handle-HTTP-Request-headers-) Header in it's requests, which will append the input being inserted inside the parameter to the existing IP addresses of the client.
 
-The scanner identified that the cache is being interpreted and evaluated with the "HIT" response, and that we have Unkeyed params which can be used to differ between requests, and we can serve the same page with additional context to victims who query the specific cached endpoint.
+The scanner identified that the cache is being interpreted and evaluated with the **HIT** response, and that we have Unkeyed params which can be used to differ between requests, and we can serve the same page with additional context to victims who query the specific cached endpoint.
 
 Now, into the exploitation part.
 
@@ -79,7 +79,7 @@ to the X-Forwarded-For header? will it reflect in the response?
 
 ![hit_request](/images/hit_request.png)
 
-And it was the case, I managed to inject XSS payload from my header request, which got reflected in the page and got "HIT" indication frm the CF-Cache-Status header.
+And it was the case, I managed to inject XSS payload from my header request, which got reflected in the page and got **HIT** indication frm the CF-Cache-Status header.
 
 In order to verify that the content is being served from the cache, we should initiate a second request without the X-Forwarded-For header this time, and to see if the response remains the same.
 
@@ -111,7 +111,7 @@ I will give a few tips on writing Web Cache Poisoning report, as it took some ba
 
 ### Submitting the report
 
-I have submitted my report to Bugcrowd as "Web Cache Poisoning via X-Forwarded-For Header to Stored XSS on subdomain.example.com"
+I have submitted my report to Bugcrowd as **Web Cache Poisoning via X-Forwarded-For Header to Stored XSS on subdomain.example.com**
 
 Upon my first submission I didn't take into consideration the file types which cloudflare caching accepts, which madem y reproduction steps not reproducible at first.
 
@@ -121,7 +121,7 @@ Reading this great [Cache Poisoning Report](https://hackerone.com/reports/303730
 
 ![poisoning_areas](/images/poisoning_areas.png)
 
-I have included those lines of wisdom which explained the fact about the cdn "regions", and where as attackers we can craft our PoC to attack and target other regions.
+I have included those lines of wisdom which explain really well the idea behind the cdn "regions", and where as attackers we can craft our PoC to attack and target other regions.
 
 Although we shouldn't guess the region of our triager, so it should be enough demonstrating the impact within our local network, giving the following clear reproduction steps
 
