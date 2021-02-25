@@ -160,3 +160,4 @@ Some Social Links:
 - [ ] Bugcrowd: <https://bugcrowd.com/Nagli>
 - [ ] Linkedin: <https://www.linkedin.com/in/galnagli>
 
+Credit to CloudFlare for the Poisoning image.
