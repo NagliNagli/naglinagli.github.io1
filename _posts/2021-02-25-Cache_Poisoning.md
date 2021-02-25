@@ -1,13 +1,13 @@
 ---
 layout: single
-title: Poisoning your Cache for 1000$ - Approach to Exploitation walkthrough
+title: Poisoning your Cache for 1000$ - Approach to Exploitation Walkthrough
 date: 2021-02-25
 classes: wide
 thumbnail: https://galnagli.com/images/Samsung_teaser.png
 image: https://galnagli.com/images/Samsung_teaser.png
 --- 
 
-**Poisoning your Cache for 1000$ - Approach to Exploitation walkthrough**
+**Poisoning your Cache for 1000$ - Approach to Exploitation Walkthrough**
 
 ![preview](/images/cache-poison.jpg)
 
