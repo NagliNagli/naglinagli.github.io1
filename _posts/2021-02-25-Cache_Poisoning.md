@@ -13,7 +13,7 @@ header: https://galnagli.com/images/Samsung_teaser.png
 
 ## General
 
-Cometh the month of February I was surprised to open my email and seeing that I have recieved a new private program invite from Bugcrowd, as this is a rare occasion for many during the last couple of months.
+Cometh the month of February I was surprised to open my email seeing that I have recieved a new private program invite from Bugcrowd, as this is a rare occasion for many during the last couple of months.
 
 The program was fairly new, and I received the invite 2 days upon their official launch, meaning that there already was first sweep for bugs from the first batch of security researchers.
 
