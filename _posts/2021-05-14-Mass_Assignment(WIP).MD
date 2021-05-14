@@ -6,7 +6,7 @@ classes: wide
 thumbnail: https://galnagli.com/images/Mass-Assignment.jpg
 header: https://galnagli.com/images/Mass-Assignment.jpg
 header:
-  teaser: /images/cache-poison.jpg##
+  teaser: /images/cache-poison.jpg
 --- 
 
 ![preview](/images/Mass-Assignment.jpg)
