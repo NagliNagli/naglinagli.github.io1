@@ -9,8 +9,6 @@ header:
   teaser: /images/cache-poison.jpg##
 --- 
 
-**Mass Assignment exploitation in the wild - Esclating privileges in style **
-
 ![preview](/images/Mass-Assignment.jpg)
 
 ## General
@@ -46,7 +44,63 @@ Binding client provided data (e.g., JSON) to data models, without proper propert
 ```
 
 
+To understand the attack vector better, let's take a look at the following image [credit](https://global-uploads.webflow.com/5ffc6b565fe11e76be021da1/602eda3ff4abd10d2e127f9c__56aRngXYuute5buEI-7RY2kkbixkjMPYxw1_dX0D_t863mTh6kwzlZTCKrOuNGpmKVRg-1_hWgXDiqk4-ddN5bV8ZM-lkvfWgb2FOnN7WCGithAQ9Es-pl6x-s6UQ_NWgHSEMAu.png)
 
+![Mass_assignment_example](/images/Mass_Example.png)
+
+The image above demonstrates in a scenario which was very similar to my finding.
+
+as we can see we are dealing with an API which accepts JSON objects from a client, those are common on API's when we want to update our account information, for example changing our phone number or email address.
+
+We are being presented with a scheme which mostly is supported in the UI, as we are being shown text fields to fill for address,email,first name and so on.
+
+On the same user update panel, usually there are administrator functionalities as well for the site owner, and on those the JSON Object expands with the displayed UI with more options as is legitimated for administrator account, he might have the ability to set roles for other users, and choose their way of authentication.
+
+It's pretty clear now to see how the vulnerability exploitation will come apart, as the sensitive fields are not presented to the regular user in his UI or upon his user update request, there might be a misconfiguration in the Authorization model within the application, which will accept the unknown JSON fields from none permissive user account and will process it as it was an administrator.
+
+Taking it to the example above, imagine the user adds to his request the following key:value
+
+```
+"role":"admin"
+```
+
+As the server won't enforce any authorization check, the user will become an administrator in a sight of a single PUT request.
+
+You might have wondered by now how can we as regular users without any permissions have guessed the hidden key:values pairs which might be hidden and exploitable?
+
+There are 2 main vectors to find those, which can be divided into "Blackbox" and "Whitebox" approach
+
+### Blackbox Approach
+
+As for the "Blackbox" testing, we can use Burp's [Param Miner](https://portswigger.net/bappstore/17d2949a985c4b7ca092728dba871943) extension, when we have HTTP request which sends data within JSON format, we are being presented with the "Guess JSON parameters" option, which will bruteforce for common JSON params and see if it affects the server response, by issuing the Param Miner probe we can guess for those hidden sensitive fields.
+
+![json_param](/images/json_param.png)
+
+### Whitebox Approach
+
+If we are being presented within our testing with adminsitrator credentials, we should navigate throught the supplied account, mostly into the profile update fields or new user invitations, mainly looking for those PUT or POST json based requests and note down the json parameters supplied in those.
+
+Later, we should approach the application the same way with normal user account, by matching and comparing the query params available for none-permissive account to an administrator we can determine and craft payloads based on the differences.
+
+## Exploitation
+
+After going through the foreword, we can dive in the actual vulnerability I managed to find during my assesment.
+
+As for certain application testing for a client within Synack, we were presented with a post-auth application with several user roles, there were editors, viewers and administrators.
+
+As a general approach with like-wise application I'd look for potential endpoints which could be vulnerable to Privilege Escalations, as those often require learning the application behaviour and will most likely will have less competition going over the Quality Rule results later on.
+
+We were presented with Adminsitrator Account only throughout the following testing.
+
+As I was navigating throughout the application, I found an endpoint which gave us the ability to invite new users to the our organization environment
+
+```
+https://example.com/app/users/addNew
+```
+
+Therfore I invited myself for an additional account with a "Viewer" permissions only, so I could conduct the testing in an efficent manner.
+
+![user-invite](/images/user-invite.png)
 
 ### Getting the first foothold.
 
