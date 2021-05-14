@@ -33,13 +33,18 @@ As the vulnerability of "Mass Assignment" is not often talked about and there ar
 
 as per [OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html)
 
+```
 Software frameworks sometime allow developers to automatically bind HTTP request parameters into program code variables or objects to make using that framework easier on developers. This can sometimes cause harm.
 
 Attackers can sometimes use this methodology to create new parameters that the developer never intended which in turn creates or overwrites new variable or objects in program code that was not intended.
+```
 
 Adding to that, as per [OWASP API top 10](https://owasp.org/www-project-api-security/), Mass Assignment is ranked at the 6th place, following it's defenition:
 
+```
 Binding client provided data (e.g., JSON) to data models, without proper properties filtering based on an allowlist, usually leads to Mass Assignment. Either guessing objects properties, exploring other API endpoints, reading the documentation, or providing additional object properties in request payloads, allows attackers to modify object properties they are not supposed to.
+```
+
 
 
 
