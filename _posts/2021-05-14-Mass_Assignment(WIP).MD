@@ -126,7 +126,7 @@ Name, Email and Language
 
 ![user-profile](/images/user-profile.png)
 
-Clicking on the "Save Changes" button and intercepting the request, presented us with the following:
+Clicking on the "Save Changes" button presented us with the following HTTP request:
 
 ```
 POST /web/api/user/v1/edit HTTP/1.1
@@ -151,9 +151,9 @@ Cookie: XXXXXXXX
 
 ```
 
-a JSON object with the fields presented at the UI, so it looks fine at this point.
+a JSON object with the fields presented at the UI, so it looks fine up to this point.
 
-Going to the administrator account, I went to the same endpoint and issued the same request by clicking on the "Save Changes" button, only this time to see:
+Going to the administrator account, I went to the same endpoint and issued the same request by clicking on the "Save Changes" button, only this time to see the following:
 
 ```
 POST /web/api/user/v1/edit HTTP/1.1
@@ -179,25 +179,27 @@ Cookie: XXXXXXXX
 
 So this one was interesting, I was presented with the same UI on both requests, but this time when I approached further and saved my new profile details as the administrator there was an additional field presented, the "roles" one.
 
-Although I didn't really believe that it would work, all I did was navigating into the "Viewer" user account, again capturing the "Save Changes" request, only this time adding the key-value pair of
+Although I didn't really believe that it would work, all I did was navigating to the "Viewer" user account, again capturing the "Save Changes" request, only this time adding the key-value pair of
 
 ```
 "roles":["administrator"]
 ```
 
-to the JSON object, and upon issuing the POST request I could observe the 200 OK response, with the OK value - indiciating that the exploitation worked.
+To the JSON object.
+
+Upon issuing the POST request I could observe the 200 OK response, with the OK value - indiciating that the exploitation worked.
 
 ![response](/images/working_exploit.png)
 
 And so it was, we managed to escalate from normal user to administrator account with a simple POST request on the user profile edit area.
 
-You could have noticed that it was easier to find the sensitive hidden param from the WhiteBox approach, although the parameter name is pretty common and could have been found with Param Miner on blackbox testing aswell.
+You could have noticed that it was easier to find the sensitive hidden param from the Whitebox approach, although the parameter name is pretty common and could have been found with Param Miner on Blackbox testing aswell.
 
 ### Wrapping up the report
 
 Concluding the exploitation above, those were the steps taken as it was stated in the original report:
 
-1. Navigate to 
+- [x] Navigate to 
 
 ```
 https://example.com/app/users/addNew
@@ -205,7 +207,7 @@ https://example.com/app/users/addNew
 
 and add a new account with limited permissions
 
-2. Log in with the new user account and navigate to
+- [x] Log in with the new user account and navigate to
 
 ```
 https://example.com/app/profile
@@ -213,13 +215,13 @@ https://example.com/app/profile
 
 Click on the "Save changes button" and capture the request
 
-3. Add to the json scheme the following:
+- [x] Add to the json scheme the following:
 
 ```
 "updates":{"name":"hello","email":"your email","roles":["administrator"],"enabled":true}}
 ```
 
-4. The user account has successfully escalated his privileges to administrator's one.
+- [x] The user account has successfully escalated his privileges to administrator's one.
 
 ### Recommended fix
 
