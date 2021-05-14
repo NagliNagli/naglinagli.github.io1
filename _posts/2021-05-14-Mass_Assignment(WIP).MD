@@ -233,7 +233,9 @@ In more depth way to our own vulnerability, we should ensure that the roles para
 
 ### Conclusion
 
-The Quality Period for this specific application assesment had 40 reports submitted within the first 8 hours of the rounds, and I was the only one who reported this specific privilege escalation issue leverging the Mass Assignment vulnerability.
+The Quality Period for this specific application assesment had 40 reports submitted within the first 8 hours of the engagement
+
+I was the only one who reported this specific privilege escalation issue leverging the Mass Assignment vulnerability.
 
 It had a CVSS score of 8.1 and had received additional criticality bonus.
 
