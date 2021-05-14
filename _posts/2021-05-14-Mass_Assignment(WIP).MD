@@ -3,8 +3,8 @@ layout: single
 title: Mass Assignment exploitation in the wild - Escalating privileges in style
 date: 2021-02-25
 classes: wide
-thumbnail: https://galnagli.com/images/Mass-Assignment.jpg##
-header: https://galnagli.com/images/Mass-Assignment.jpg##
+thumbnail: https://galnagli.com/images/Mass-Assignment.jpg
+header: https://galnagli.com/images/Mass-Assignment.jpg
 header:
   teaser: /images/cache-poison.jpg##
 --- 
