@@ -15,13 +15,13 @@ header:
 
 As I have been accepted to Synack's Red Team at the beginning of march, the opportunity emerged required me and other bounty hunters to conduct a "mental shift", as most of the lucrative bounty programs on the public platforms will be the wildcard scoped ones, it's mostly the contrary while hunting on Synack.
 
-Working with the model of "QR" periods, most hunters will receive 2~3 new application testing invites each week which starts with 8 hours Quallity Rule, meaning it's not about being the first to report the issue, it's about the best report and the most parameters invovled.
+Working with the model of "QR" periods, most hunters will receive 2~3 new application testing invites each week which starts with 8 hours Quallity Rule, meaning it's not about being the first to report the issue, it's about the best report and as many vulnerable parameters invovled.
 
-those invites mostly invlove a post-authentication webapp testing for a certain functioniality of big organisations.
+those invites mostly invlove a post-authentication webapp testing for a certain functioniality of big organizations.
 
-As we are as researchers the first security engagement the application faces, it often exposes some unique vulnerabilities and exploitations.
+As mostly conduct the first security engagement of the supplied application, it often exposes some unique vulnerabilities and attack vectors to explore.
 
-During one of those engagements I managed to find a Mass Assignment vulnerability, which helped me escalate privileges from normal user without any permissions to a fully permissive adminsitrator account.
+During one of those engagements I managed to find a Mass Assignment vulnerability, which helped me escalate privileges from normal user without any permissions to a fully permissive administrator account.
 
 
 
@@ -37,26 +37,36 @@ Software frameworks sometime allow developers to automatically bind HTTP request
 Attackers can sometimes use this methodology to create new parameters that the developer never intended which in turn creates or overwrites new variable or objects in program code that was not intended.
 ```
 
-Adding to that, as per [OWASP API top 10](https://owasp.org/www-project-api-security/), Mass Assignment is ranked at the 6th place, following it's defenition:
+Adding to that, as per [OWASP API top 10](https://owasp.org/www-project-api-security/), Mass Assignment is ranked at the 6th place, following it's definition:
 
 ```
 Binding client provided data (e.g., JSON) to data models, without proper properties filtering based on an allowlist, usually leads to Mass Assignment. Either guessing objects properties, exploring other API endpoints, reading the documentation, or providing additional object properties in request payloads, allows attackers to modify object properties they are not supposed to.
 ```
 
 
-To understand the attack vector better, let's take a look at the following image [credit](https://global-uploads.webflow.com/5ffc6b565fe11e76be021da1/602eda3ff4abd10d2e127f9c__56aRngXYuute5buEI-7RY2kkbixkjMPYxw1_dX0D_t863mTh6kwzlZTCKrOuNGpmKVRg-1_hWgXDiqk4-ddN5bV8ZM-lkvfWgb2FOnN7WCGithAQ9Es-pl6x-s6UQ_NWgHSEMAu.png)
+To understand the attack vector better, let's take a look at the following image: 
 
 ![Mass_assignment_example](/images/Mass_Example.png)
 
-The image above demonstrates in a scenario which was very similar to my finding.
+[credit](https://global-uploads.webflow.com/5ffc6b565fe11e76be021da1/602eda3ff4abd10d2e127f9c__56aRngXYuute5buEI-7RY2kkbixkjMPYxw1_dX0D_t863mTh6kwzlZTCKrOuNGpmKVRg-1_hWgXDiqk4-ddN5bV8ZM-lkvfWgb2FOnN7WCGithAQ9Es-pl6x-s6UQ_NWgHSEMAu.png)
 
-as we can see we are dealing with an API which accepts JSON objects from a client, those are common on API's when we want to update our account information, for example changing our phone number or email address.
+The image above demonstrates a scenario which was very similar to almost exact of my own finding.
 
-We are being presented with a scheme which mostly is supported in the UI, as we are being shown text fields to fill for address,email,first name and so on.
+as we can see from the image we are dealing with an API which accepts JSON objects from a client, those are common on API's when we want to update our account information, for example changing our phone number or email address.
 
-On the same user update panel, usually there are administrator functionalities as well for the site owner, and on those the JSON Object expands with the displayed UI with more options as is legitimated for administrator account, he might have the ability to set roles for other users, and choose their way of authentication.
+We are being presented with a scheme which in most cases will be represented in a UI as text fields to fill before submitting the request by a button click, such as
 
-It's pretty clear now to see how the vulnerability exploitation will come apart, as the sensitive fields are not presented to the regular user in his UI or upon his user update request, there might be a misconfiguration in the Authorization model within the application, which will accept the unknown JSON fields from none permissive user account and will process it as it was an administrator.
+```
+address,email,first name and so on.
+```
+
+The user update panel often differs between normal user and administrator, as those often posess more functionalities to assist the site owner.
+the displayed UI might look the same, but the JSON object submitted within the request might have additional sensitive parameters involved.
+
+
+It's pretty clear now to see how the vulnerability exploitation will come along, as the sensitive fields are not presented to the regular user in his UI or upon his user update request,
+
+There might be a misconfiguration in the Authorization model within the application which will accept the hidden JSON fields from none permissive user account and will process it as it was an administrator.
 
 Taking it to the example above, imagine the user adds to his request the following key:value
 
@@ -66,7 +76,7 @@ Taking it to the example above, imagine the user adds to his request the followi
 
 As the server won't enforce any authorization check, the user will become an administrator in a sight of a single PUT request.
 
-You might have wondered by now how can we as regular users without any permissions have guessed the hidden key:values pairs which might be hidden and exploitable?
+You might have wondered by now how can we as regular users without any permissions have guessed the hidden key:values pairs?
 
 There are 2 main vectors to find those, which can be divided into "Blackbox" and "Whitebox" approach
 
@@ -78,19 +88,19 @@ As for the "Blackbox" testing, we can use Burp's [Param Miner](https://portswigg
 
 ### Whitebox Approach
 
-If we are being presented within our testing with adminsitrator credentials, we should navigate throught the supplied account, mostly into the profile update fields or new user invitations, mainly looking for those PUT or POST json based requests and note down the json parameters supplied in those.
+If we are being presented within our testing with administrator credentials, we should navigate throught the supplied account, mostly into the profile update fields or new user invitations, mainly looking for those PUT or POST json based requests and note down the json parameters supplied in those.
 
-Later, we should approach the application the same way with normal user account, by matching and comparing the query params available for none-permissive account to an administrator we can determine and craft payloads based on the differences.
+Later, we should approach the application the same way with normal user account, by matching and comparing the json params available for none-permissive account to an administrator we can determine and craft payloads based on the differences.
 
 ## Exploitation
 
-After going through the foreword, we can dive in the actual vulnerability I managed to find during my assesment.
+After going through the foreword, we can dive to actual vulnerability I managed to find during the application assesment.
 
 As for certain application testing for a client within Synack, we were presented with a post-auth application with several user roles, there were editors, viewers and administrators.
 
-As a general approach with like-wise application I'd look for potential endpoints which could be vulnerable to Privilege Escalations, as those often require learning the application behaviour and will most likely will have less competition going over the Quality Rule results later on.
+As a general approach with like-wise application I'd look for potential endpoints which could be vulnerable to Privilege Escalation, as those often require studying the application behaviour and will most likely have less competition going over the Quality Rule results later on.
 
-We were presented with Adminsitrator Account only throughout the following testing.
+We were presented with administrator Account only throughout the following testing.
 
 As I was navigating throughout the application, I found an endpoint which gave us the ability to invite new users to the our organization environment
 
